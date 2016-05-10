@@ -1,16 +1,15 @@
 'use strict';
-/*global setImmediate:true*/
-var through = require('through2'),
-  setImmediate = global.setImmediate || function (callback) {
+var through = require('../lib/through.js');
+var setImmediate = global.setImmediate || function (callback) {
     setTimeout(callback, 0);
-  };
+};
 
 module.exports.testStream = function () {
-  return through(function (buf, enc, cb) {
-    var that = this;
-    setImmediate(function () {
-      that.push(buf);
-      cb();
+    return through(function (buf, enc, cb) {
+        var that = this;
+        setImmediate(function () {
+            that.push(buf);
+            cb();
+        });
     });
-  });
 };
