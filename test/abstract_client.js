@@ -1104,9 +1104,7 @@ module.exports = function (server, config) {
         });
     });
 
-    describe('auto reconnect', function (scope) {
-        scope.timeout = 30000;
-
+    describe('auto reconnect', function () {
         it('should mark the client disconnecting if #end called', function () {
             var client = connect();
 
@@ -1216,7 +1214,7 @@ module.exports = function (server, config) {
         });
 
         it('should resend in-flight QoS 1 publish messages from the client', function (done) {
-            var client = connect({ reconnectPeriod: 200 });
+            var client = connect({ reconnectPeriod: 200, keepalive: 1 });
             var serverPublished = false;
             var clientCalledBack = false;
 
@@ -1241,7 +1239,6 @@ module.exports = function (server, config) {
             });
 
             function check() {
-                console.log('check check', clientCalledBack, serverPublished);
                 if (serverPublished && clientCalledBack) {
                     done();
                 }
@@ -1249,7 +1246,7 @@ module.exports = function (server, config) {
         });
 
         it('should resend in-flight QoS 2 publish messages from the client', function (done) {
-            var client = connect({ reconnectPeriod: 200 });
+            var client = connect({ reconnectPeriod: 200, keepalive: 1 });
             var serverPublished = false;
             var clientCalledBack = false;
 
