@@ -1,10 +1,11 @@
 {
     "name": "mqtt",
-    "description": "A library for the MQTT protocol",
+    "description": "A library for the MQTT protocol ported for Ruff",
     "version": "1.9.0",
     "contributors": [
         "Adam Rudd <adamvrr@gmail.com>",
-        "Matteo Collina <matteo.collina@gmail.com> (https://github.com/mcollina)"
+        "Matteo Collina <matteo.collina@gmail.com> (https://github.com/mcollina)",
+        "Vilic Vane <i@vilic.info>"
     ],
     "keywords": [
         "mqtt",
@@ -13,36 +14,12 @@
         "subscribe"
     ],
     "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/mqttjs/MQTT.js.git"
-    },
     "main": "mqtt.js",
     "scripts": {
-        "test": "mocha"
+        "test": "ruff test/t.js"
     },
-    "pre-commit": [
-        "test"
-    ],
     "engines": {
-        "ruff": "^1.0.0"
-    },
-    "browser": {
-        "./mqtt.js": "./lib/connect/index.js",
-        "fs": false,
-        "tls": false,
-        "net": false
-    },
-    "dependencies": {
-        "commist": "^1.0.0",
-        "concat-stream": "^1.4.7",
-        "minimist": "^1.1.0",
-        "mqtt-connection": "^2.0.0",
-        "mqtt-packet": "^3.2.0",
-        "readable-stream": "~1.0.2",
-        "reinterval": "^1.0.1",
-        "websocket-stream": "^3.0.1",
-        "xtend": "^4.0.0"
+        "ruff": "^1.1.0"
     },
     "devDependencies": {
         "browserify": "^11.0.1",
@@ -53,9 +30,6 @@
         "through2": "^0.6.3"
     },
     "ruff": {
-        "dependencies": {
-            "t": "^0.1.5"
-        },
         "devDependencies": {
             "sinon": "npm:^1.17.4",
             "should": "npm:^8.3.1",
