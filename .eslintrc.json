@@ -8,6 +8,7 @@
         "uv": true
     },
     "rules": {
+        "one-var": ["error", "never"],
         "accessor-pairs": "error",
         "array-bracket-spacing": [
             "error",
@@ -86,8 +87,6 @@
         "newline-before-return": "off",
         "newline-per-chained-call": "off",
         "indent": ["error", 4, { "SwitchCase": 1 }],
-        "no-shadow": "off",
-        "no-process-env": "off",
         "no-redeclare": ["warn"],
         "no-alert": "error",
         "no-array-constructor": "error",
@@ -136,8 +135,6 @@
         "no-param-reassign": "off",
         "no-path-concat": "error",
         "no-plusplus": "off",
-        "no-process-env": "error",
-        "no-process-exit": "error",
         "no-proto": "error",
         "no-restricted-globals": "error",
         "no-restricted-imports": "error",
@@ -147,7 +144,6 @@
         "no-script-url": "error",
         "no-self-compare": "error",
         "no-sequences": "error",
-        "no-shadow": "error",
         "no-shadow-restricted-names": "error",
         "no-spaced-func": "error",
         "no-sync": "off",

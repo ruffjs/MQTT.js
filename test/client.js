@@ -111,8 +111,8 @@ describe('MqttClient', function () {
 
     describe('message ids', function () {
         it('should increment the message id', function () {
-            var client = mqtt.connect(config),
-                currentId = client._nextId();
+            var client = mqtt.connect(config);
+            var currentId = client._nextId();
 
             client._nextId().should.equal(currentId + 1);
         });
@@ -134,15 +134,7 @@ describe('MqttClient', function () {
             var args = [path.join(__dirname, 'helpers/server_process.js')];
             var cwd = uv.cwd();
 
-            var innerServerHandle = uv.spawn(
-                execPath,
-                args,
-                cwd,
-                -1,
-                -1,
-                -1,
-                function () { }
-            );
+            uv.spawn(execPath, args, cwd, -1, -1, -1, function () { });
 
             setTimeout(function () {
                 var client = mqtt.connect({
@@ -221,15 +213,16 @@ describe('MqttClient', function () {
             });
 
             server2.once('listening', function () {
-                var reconnects = 0,
-                    connectTimeout = 1000,
-                    reconnectPeriod = 100,
-                    expectedReconnects = Math.floor(connectTimeout / reconnectPeriod),
-                    client = mqtt.connect({
-                        port: port + 44,
-                        host: 'localhost',
-                        connectTimeout: connectTimeout,
-                        reconnectPeriod: reconnectPeriod });
+                var reconnects = 0;
+                var connectTimeout = 1000;
+                var reconnectPeriod = 100;
+                var expectedReconnects = Math.floor(connectTimeout / reconnectPeriod);
+                var client = mqtt.connect({
+                    port: port + 44,
+                    host: 'localhost',
+                    connectTimeout: connectTimeout,
+                    reconnectPeriod: reconnectPeriod
+                });
 
                 client.on('reconnect', function () {
                     reconnects++;
@@ -241,13 +234,13 @@ describe('MqttClient', function () {
             });
         });
         it('shoud not keep requeueing the first message when offline', function (done) {
-            var server2 = buildServer().listen(port + 45),
-                client = mqtt.connect({
-                    port: port + 45,
-                    host: 'localhost',
-                    connectTimeout: 350,
-                    reconnectPeriod: 300
-                });
+            var server2 = buildServer().listen(port + 45);
+            var client = mqtt.connect({
+                port: port + 45,
+                host: 'localhost',
+                connectTimeout: 350,
+                reconnectPeriod: 300
+            });
 
             server2.on('client', function (c) {
                 client.publish('hello', 'world', { qos: 1 }, function () {

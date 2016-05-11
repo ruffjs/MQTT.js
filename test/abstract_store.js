@@ -71,15 +71,15 @@ module.exports = function abstractStoreTest(build) {
 
     it('should replace a packet when doing put with the same messageId', function (done) {
         var packet1 = {
-                topic: 'hello',
-                payload: 'world',
-                qos: 2,
-                messageId: 42
-            },
-            packet2 = {
-                qos: 2,
-                messageId: 42
-            };
+            topic: 'hello',
+            payload: 'world',
+            qos: 2,
+            messageId: 42
+        };
+        var packet2 = {
+            qos: 2,
+            messageId: 42
+        };
 
         store.put(packet1, function () {
             store.put(packet2, function () {

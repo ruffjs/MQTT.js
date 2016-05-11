@@ -246,8 +246,8 @@ module.exports = function (server, config) {
         });
 
         it('should have different client ids', function () {
-            var client1 = connect(),
-                client2 = connect();
+            var client1 = connect();
+            var client2 = connect();
 
             client1.options.clientId.should.not.equal(client2.options.clientId);
             client1.end();
@@ -382,9 +382,9 @@ module.exports = function (server, config) {
 
     describe('publishing', function () {
         it('should publish a message (offline)', function (done) {
-            var client = connect(),
-                payload = 'test',
-                topic = 'test';
+            var client = connect();
+            var payload = 'test';
+            var topic = 'test';
 
             client.publish(topic, payload);
 
@@ -400,9 +400,9 @@ module.exports = function (server, config) {
         });
 
         it('should publish a message (online)', function (done) {
-            var client = connect(),
-                payload = 'test',
-                topic = 'test';
+            var client = connect();
+            var payload = 'test';
+            var topic = 'test';
 
             client.on('connect', function () {
                 client.publish(topic, payload);
@@ -420,13 +420,13 @@ module.exports = function (server, config) {
         });
 
         it('should accept options', function (done) {
-            var client = connect(),
-                payload = 'test',
-                topic = 'test',
-                opts = {
-                    retain: true,
-                    qos: 1
-                };
+            var client = connect();
+            var payload = 'test';
+            var topic = 'test';
+            var opts = {
+                retain: true,
+                qos: 1
+            };
 
             client.once('connect', function () {
                 client.publish(topic, payload, opts);
@@ -452,8 +452,8 @@ module.exports = function (server, config) {
         });
 
         it('should fire a callback (qos 1)', function (done) {
-            var client = connect(),
-                opts = { qos: 1 };
+            var client = connect();
+            var opts = { qos: 1 };
 
             client.once('connect', function () {
                 client.publish('a', 'b', opts, done);
@@ -461,8 +461,8 @@ module.exports = function (server, config) {
         });
 
         it('should fire a callback (qos 2)', function (done) {
-            var client = connect(),
-                opts = { qos: 2 };
+            var client = connect();
+            var opts = { qos: 2 };
 
             client.once('connect', function () {
                 client.publish('a', 'b', opts, done);
@@ -486,8 +486,8 @@ module.exports = function (server, config) {
         });
 
         it('Publish 10 QoS 2 and receive them', function (done) {
-            var client = connect(),
-                count = 0;
+            var client = connect();
+            var count = 0;
 
             client.on('connect', function () {
                 client.subscribe('test');
@@ -535,8 +535,8 @@ module.exports = function (server, config) {
         });
 
         it('should send an unsubscribe packet', function (done) {
-            var client = connect(),
-                topic = 'topic';
+            var client = connect();
+            var topic = 'topic';
 
             client.once('connect', function () {
                 client.unsubscribe(topic);
@@ -551,8 +551,8 @@ module.exports = function (server, config) {
         });
 
         it('should accept an array of unsubs', function (done) {
-            var client = connect(),
-                topics = ['topic1', 'topic2'];
+            var client = connect();
+            var topics = ['topic1', 'topic2'];
 
             client.once('connect', function () {
                 client.unsubscribe(topics);
@@ -567,8 +567,8 @@ module.exports = function (server, config) {
         });
 
         it('should fire a callback on unsuback', function (done) {
-            var client = connect(),
-                topic = 'topic';
+            var client = connect();
+            var topic = 'topic';
 
             client.once('connect', function () {
                 client.unsubscribe(topic, done);
@@ -582,8 +582,8 @@ module.exports = function (server, config) {
         });
 
         it('should unsubscribe from a chinese topic', function (done) {
-            var client = connect(),
-                topic = '中国';
+            var client = connect();
+            var topic = '中国';
 
             client.once('connect', function () {
                 client.unsubscribe(topic);
@@ -610,8 +610,8 @@ module.exports = function (server, config) {
         });
 
         it('should checkPing at keepalive interval', function (done) {
-            var interval = 1,
-                client = connect({ keepalive: interval });
+            var interval = 1;
+            var client = connect({ keepalive: interval });
 
             client._checkPing = sinon.spy();
 
@@ -631,8 +631,8 @@ module.exports = function (server, config) {
             });
         });
         it('should not checkPing if publishing at a higher rate than keepalive', function (done) {
-            var intervalMs = 3000,
-                client = connect({ keepalive: intervalMs / 1000 });
+            var intervalMs = 3000;
+            var client = connect({ keepalive: intervalMs / 1000 });
 
             client._checkPing = sinon.spy();
 
@@ -647,8 +647,8 @@ module.exports = function (server, config) {
             });
         });
         it('should checkPing if publishing at a higher rate than keepalive and reschedulePings===false', function (done) {
-            var intervalMs = 3000,
-                client = connect({ keepalive: intervalMs / 1000, reschedulePings: false });
+            var intervalMs = 3000;
+            var client = connect({ keepalive: intervalMs / 1000, reschedulePings: false });
 
             client._checkPing = sinon.spy();
 
@@ -685,9 +685,7 @@ module.exports = function (server, config) {
             var client = connect({ keepalive: 1, reconnectPeriod: 50 });
 
             // Fake no pingresp being send by stubbing the _handlePingresp function
-            client._handlePingresp = function () {
-                console.log('override handle ping response called');
-            };
+            client._handlePingresp = function () { };
 
             client.once('connect', function () {
                 setTimeout(function () {
@@ -744,8 +742,8 @@ module.exports = function (server, config) {
         });
 
         it('should send a subscribe message', function (done) {
-            var client = connect(),
-                topic = 'test';
+            var client = connect();
+            var topic = 'test';
 
             client.once('connect', function () {
                 client.subscribe(topic);
@@ -763,8 +761,8 @@ module.exports = function (server, config) {
         });
 
         it('should accept an array of subscriptions', function (done) {
-            var client = connect(),
-                subs = ['test1', 'test2'];
+            var client = connect();
+            var subs = ['test1', 'test2'];
 
             client.once('connect', function () {
                 client.subscribe(subs);
@@ -784,8 +782,8 @@ module.exports = function (server, config) {
         });
 
         it('should accept an hash of subscriptions', function (done) {
-            var client = connect(),
-                topics = { 'test1': 0, 'test2': 1 };
+            var client = connect();
+            var topics = { 'test1': 0, 'test2': 1 };
 
             client.once('connect', function () {
                 client.subscribe(topics);
@@ -793,8 +791,8 @@ module.exports = function (server, config) {
 
             server.once('client', function (serverClient) {
                 serverClient.once('subscribe', function (packet) {
-                    var k,
-                        expected = [];
+                    var k;
+                    var expected = [];
 
                     for (k in topics) {
                         if (topics.hasOwnProperty(k)) {
@@ -812,9 +810,9 @@ module.exports = function (server, config) {
         });
 
         it('should accept an options parameter', function (done) {
-            var client = connect(),
-                topic = 'test',
-                opts = { qos: 1 };
+            var client = connect();
+            var topic = 'test';
+            var opts = { qos: 1 };
 
             client.once('connect', function () {
                 client.subscribe(topic, opts);
@@ -831,8 +829,8 @@ module.exports = function (server, config) {
         });
 
         it('should fire a callback on suback', function (done) {
-            var client = connect(),
-                topic = 'test';
+            var client = connect();
+            var topic = 'test';
 
             client.once('connect', function () {
                 client.subscribe(topic, { qos: 2 }, function (err, granted) {
@@ -848,8 +846,8 @@ module.exports = function (server, config) {
         });
 
         it('should fire a callback with error if disconnected (options provided)', function (done) {
-            var client = connect(),
-                topic = 'test';
+            var client = connect();
+            var topic = 'test';
             client.once('connect', function () {
                 client.end(true, function () {
                     client.subscribe(topic, { qos: 2 }, function (err, granted) {
@@ -861,8 +859,8 @@ module.exports = function (server, config) {
             });
         });
         it('should fire a callback with error if disconnected (options not provided)', function (done) {
-            var client = connect(),
-                topic = 'test';
+            var client = connect();
+            var topic = 'test';
             client.once('connect', function () {
                 client.end(true, function () {
                     client.subscribe(topic, function (err, granted) {
@@ -874,8 +872,8 @@ module.exports = function (server, config) {
             });
         });
         it('should subscribe with a chinese topic', function (done) {
-            var client = connect(),
-                topic = '中国';
+            var client = connect();
+            var topic = '中国';
 
             client.once('connect', function () {
                 client.subscribe(topic);
@@ -895,14 +893,14 @@ module.exports = function (server, config) {
 
     describe('receiving messages', function () {
         it('should fire the message event', function (done) {
-            var client = connect(),
-                testPacket = {
-                    topic: 'test',
-                    payload: 'message',
-                    retain: true,
-                    qos: 1,
-                    messageId: 5
-                };
+            var client = connect();
+            var testPacket = {
+                topic: 'test',
+                payload: 'message',
+                retain: true,
+                qos: 1,
+                messageId: 5
+            };
 
             client.subscribe(testPacket.topic);
             client.once('message', function (topic, message, packet) {
@@ -920,14 +918,14 @@ module.exports = function (server, config) {
         });
 
         it('should support binary data', function (done) {
-            var client = connect({ encoding: 'binary' }),
-                testPacket = {
-                    topic: 'test',
-                    payload: 'message',
-                    retain: true,
-                    qos: 1,
-                    messageId: 5
-                };
+            var client = connect({ encoding: 'binary' });
+            var testPacket = {
+                topic: 'test',
+                payload: 'message',
+                retain: true,
+                qos: 1,
+                messageId: 5
+            };
 
             client.subscribe(testPacket.topic);
             client.once('message', function (topic, message, packet) {
@@ -946,14 +944,14 @@ module.exports = function (server, config) {
         });
 
         it('should emit a message event (qos=2)', function (done) {
-            var client = connect(),
-                testPacket = {
-                    topic: 'test',
-                    payload: 'message',
-                    retain: true,
-                    qos: 2,
-                    messageId: 5
-                };
+            var client = connect();
+            var testPacket = {
+                topic: 'test',
+                payload: 'message',
+                retain: true,
+                qos: 2,
+                messageId: 5
+            };
 
             server.testPublish = testPacket;
 
@@ -973,14 +971,14 @@ module.exports = function (server, config) {
         });
 
         it('should emit a message event (qos=2) - repeated publish', function (done) {
-            var client = connect(),
-                testPacket = {
-                    topic: 'test',
-                    payload: 'message',
-                    retain: true,
-                    qos: 2,
-                    messageId: 5
-                };
+            var client = connect();
+            var testPacket = {
+                topic: 'test',
+                payload: 'message',
+                retain: true,
+                qos: 2,
+                messageId: 5
+            };
 
             server.testPublish = testPacket;
 
@@ -1002,14 +1000,14 @@ module.exports = function (server, config) {
         });
 
         it('should support chinese topic', function (done) {
-            var client = connect({ encoding: 'binary' }),
-                testPacket = {
-                    topic: '国',
-                    payload: 'message',
-                    retain: true,
-                    qos: 1,
-                    messageId: 5
-                };
+            var client = connect({ encoding: 'binary' });
+            var testPacket = {
+                topic: '国',
+                payload: 'message',
+                retain: true,
+                qos: 1,
+                messageId: 5
+            };
 
             client.subscribe(testPacket.topic);
             client.once('message', function (topic, message, packet) {
@@ -1031,9 +1029,9 @@ module.exports = function (server, config) {
     describe('qos handling', function () {
 
         it('should follow qos 0 semantics (trivial)', function (done) {
-            var client = connect(),
-                test_topic = 'test',
-                test_message = 'message';
+            var client = connect();
+            var test_topic = 'test';
+            var test_message = 'message';
 
             client.once('connect', function () {
                 client.subscribe(test_topic, { qos: 0 });
@@ -1053,10 +1051,10 @@ module.exports = function (server, config) {
         });
 
         it('should follow qos 1 semantics', function (done) {
-            var client = connect(),
-                test_topic = 'test',
-                test_message = 'message',
-                mid = 50;
+            var client = connect();
+            var test_topic = 'test';
+            var test_message = 'message';
+            var mid = 50;
 
             client.once('connect', function () {
                 client.subscribe(test_topic, { qos: 1 });
@@ -1080,10 +1078,10 @@ module.exports = function (server, config) {
         });
 
         it('should follow qos 2 semantics', function (done) {
-            var client = connect(),
-                test_topic = 'test',
-                test_message = 'message',
-                mid = 253;
+            var client = connect();
+            var test_topic = 'test';
+            var test_message = 'message';
+            var mid = 253;
 
             client.once('connect', function () {
                 client.subscribe(test_topic, { qos: 2 });
@@ -1106,7 +1104,9 @@ module.exports = function (server, config) {
         });
     });
 
-    describe('auto reconnect', function () {
+    describe('auto reconnect', function (scope) {
+        scope.timeout = 30000;
+
         it('should mark the client disconnecting if #end called', function () {
             var client = connect();
 
@@ -1115,8 +1115,8 @@ module.exports = function (server, config) {
         });
 
         it('should reconnect after stream disconnect', function (done) {
-            var client = connect(),
-                tryReconnect = true;
+            var client = connect();
+            var tryReconnect = true;
 
             client.on('connect', function () {
                 if (tryReconnect) {
@@ -1129,9 +1129,9 @@ module.exports = function (server, config) {
         });
 
         it('should emit \'reconnect\' when reconnecting', function (done) {
-            var client = connect(),
-                tryReconnect = true,
-                reconnectEvent = false;
+            var client = connect();
+            var tryReconnect = true;
+            var reconnectEvent = false;
 
             client.on('reconnect', function () {
                 reconnectEvent = true;
@@ -1149,9 +1149,9 @@ module.exports = function (server, config) {
         });
 
         it('should emit \'offline\' after going offline', function (done) {
-            var client = connect(),
-                tryReconnect = true,
-                offlineEvent = false;
+            var client = connect();
+            var tryReconnect = true;
+            var offlineEvent = false;
 
             client.on('offline', function () {
                 offlineEvent = true;
@@ -1192,11 +1192,11 @@ module.exports = function (server, config) {
         });
 
         it('should allow specification of a reconnect period', function (done) {
-            var end,
-                period = 200,
-                client = connect({ reconnectPeriod: period }),
-                reconnect = false,
-                start = Date.now();
+            var end;
+            var period = 200;
+            var client = connect({ reconnectPeriod: period });
+            var reconnect = false;
+            var start = Date.now();
 
             client.on('connect', function () {
                 if (!reconnect) {
@@ -1241,6 +1241,7 @@ module.exports = function (server, config) {
             });
 
             function check() {
+                console.log('check check', clientCalledBack, serverPublished);
                 if (serverPublished && clientCalledBack) {
                     done();
                 }
@@ -1248,9 +1249,9 @@ module.exports = function (server, config) {
         });
 
         it('should resend in-flight QoS 2 publish messages from the client', function (done) {
-            var client = connect({ reconnectPeriod: 200 }),
-                serverPublished = false,
-                clientCalledBack = false;
+            var client = connect({ reconnectPeriod: 200 });
+            var serverPublished = false;
+            var clientCalledBack = false;
 
             server.once('client', function (serverClient) {
                 serverClient.on('publish', function () {
