@@ -1,0 +1,10 @@
+examples/**
+test/**
+typings/**
+
+jsconfig.json
+
+.*
+
+*.zip
+*.tar

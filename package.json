@@ -1,7 +1,7 @@
 {
     "name": "mqtt",
     "description": "A library for the MQTT protocol ported for Ruff",
-    "version": "1.9.0",
+    "version": "0.1.0",
     "contributors": [
         "Adam Rudd <adamvrr@gmail.com>",
         "Matteo Collina <matteo.collina@gmail.com> (https://github.com/mcollina)",
@@ -14,7 +14,7 @@
         "subscribe"
     ],
     "license": "MIT",
-    "main": "mqtt.js",
+    "main": "index.js",
     "scripts": {
         "test": "ruff test/t.js"
     },

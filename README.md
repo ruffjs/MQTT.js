@@ -1,55 +1,19 @@
 ![mqtt.js](https://raw.githubusercontent.com/mqttjs/MQTT.js/137ee0e3940c1f01049a30248c70f24dc6e6f829/MQTT.js.png)
 =======
 
-[![Build Status](https://travis-ci.org/mqttjs/MQTT.js.svg)](https://travis-ci.org/mqttjs/MQTT.js)
-
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/mqttjs.svg)](https://saucelabs.com/u/mqttjs)
-
-[![DefinitelyTyped](http://img.shields.io/badge/Definitely-Typed-blue.svg)](https://github.com/borisyankov/DefinitelyTyped/tree/master/mqtt)
-
-[![NPM](https://nodei.co/npm/mqtt.png)](https://nodei.co/npm/mqtt/)
-[![NPM](https://nodei.co/npm-dl/mqtt.png)](https://nodei.co/npm/mqtt/)
-
 MQTT.js is a client library for the [MQTT](http://mqtt.org/) protocol, written
-in JavaScript for node.js and the browser.
+in JavaScript. And this is a fork of original [MQTT.js](https://github.com/mqttjs/MQTT.js) for Ruff that currently supports only TCP connection.
 
-* [Upgrade notes](#notes)
 * [Installation](#install)
 * [Example](#example)
-* [Command Line Tools](#cli)
 * [API](#api)
-* [Browser](#browser)
-* [Contributing](#contributing)
 * [License](#license)
-
-MQTT.js is an OPEN Open Source Project, see the [Contributing](#contributing) section to find out what this means.
-
-<a name="notes"></a>
-## Important notes for existing users
-
-v1.0.0 improves the overall architecture of the project, which is now
-split into three components: MQTT.js keeps the Client,
-[mqtt-connection](http://npm.im/mqtt-connection) includes the barebone
-Connection code for server-side usage, and [mqtt-packet](http://npm.im/mqtt-packet)
-includes the protocol parser and generator. The new Client improves
-performance by a 30% factor, embeds Websocket support
-([MOWS](http://npm.im/mows) is now deprecated), and it has a better
-support for QoS 1 and 2. The previous API is still supported but
-deprecated, as such, it id not documented in this README.
-
-As a __breaking change__, the `encoding` option in the old client is
-removed, and now everything is UTF-8 with the exception of the
-`password` in the CONNECT message and `payload` in the PUBLISH message,
-which are `Buffer`.
-
-Another __breaking change__ is that MQTT.js now defaults to MQTT v3.1.1,
-so to support old brokers, please read the [client options doc](#client).
 
 <a name="install"></a>
 ## Installation
 
 ```sh
-npm install mqtt --save
+rap install mqtt
 ```
 
 <a name="example"></a>
@@ -63,59 +27,23 @@ var client  = mqtt.connect('mqtt://test.mosquitto.org');
 
 client.on('connect', function () {
   client.subscribe('presence');
-  client.publish('presence', 'Hello mqtt');
+  client.publish('presence', 'Hello Ruff!');
 });
 
 client.on('message', function (topic, message) {
   // message is Buffer
-  console.log(message.toString());
+  console.log('topic:', topic);
+  console.log('message:', message.toString());
   client.end();
 });
 ```
 
-output:
-```
-Hello mqtt
-```
-
-If you want to run your own MQTT broker, you can use
-[Mosquitto](http://mosquitto.org) or
-[Mosca](http://mcollina.github.io/mosca/), and launch it.
-You can also use a test instance: test.mosquitto.org and test.mosca.io
-are both public.
-
-If you do not want to install a separate broker, you can try using the
-[server/orig](https://github.com/adamvr/MQTT.js/blob/master/examples/server/orig.js)
-example.
-It implements enough of the semantics of the MQTT protocol to
-run the example.
-
-to use MQTT.js in the browser see the [browserify](#browserify) section
-
-<a name="cli"></a>
-## Command Line Tools
-
-MQTT.js bundles a command to interact with a broker.
-In order to have it available on your path, you should install MQTT.js
-globally:
-
-```sh
-npm install mqtt -g
-```
-
-Then, on one terminal
+### Output
 
 ```
-mqtt sub -t 'hello' -h 'test.mosquitto.org' -v
+topic: presense
+message: Hello Ruff!
 ```
-
-On another
-
-```
-mqtt pub -t 'hello' -h 'test.mosquitto.org' -m 'from MQTT.js'
-```
-
-See `mqtt help <command>` for the command help.
 
 <a name="api"></a>
 ## API
@@ -133,7 +61,8 @@ See `mqtt help <command>` for the command help.
   * <a href="#createStream"><code>mqtt.Store#<b>createStream()</b></code></a>
   * <a href="#close"><code>mqtt.Store#<b>close()</b></code></a>
 
--------------------------------------------------------
+---
+
 <a name="connect"></a>
 ### mqtt.connect([url], options)
 
@@ -153,13 +82,13 @@ at every connect.
 For all MQTT-related options, see the [Client](#client)
 constructor.
 
--------------------------------------------------------
+---
+
 <a name="client"></a>
 ### mqtt.Client(streamBuilder, options)
 
 The `Client` class wraps a client connection to an
-MQTT broker over an arbitrary transport method (TCP, TLS,
-WebSocket, ecc).
+MQTT broker over an arbitrary transport method (TCP only in this fork).
 
 `Client` automatically handles the following:
 
@@ -196,13 +125,6 @@ the `connect` event. Typically a `net.Socket`.
     * `qos`: the QoS
     * `retain`: the retain flag
 
-In case mqtts (mqtt over tls) is required, the `options` object is
-passed through to
-[`tls.connect()`](http://nodejs.org/api/tls.html#tls_tls_connect_options_callback).
-If you are using a **self-signed certificate**, pass the `rejectUnauthorized: false` option.
-Beware that you are exposing yourself to man in the middle attacks, so it is a configuration
-that is not recommended for production environments.
-
 If you are connecting to a broker that supports only MQTT 3.1 (not
 3.1.1 compliant), you should pass these additional options:
 
@@ -220,9 +142,9 @@ version 1.3 and 1.4 works fine without those.
 
 `function(connack) {}`
 
-Emitted on successful (re)connection (i.e. connack rc=0). 
-* `connack` received connack packet. When `clean` connection option is `false` and server has a previous session 
-for `clientId` connection option, then `connack.sessionPresent` flag is `true`. When that is the case, 
+Emitted on successful (re)connection (i.e. connack rc=0).
+* `connack` received connack packet. When `clean` connection option is `false` and server has a previous session
+for `clientId` connection option, then `connack.sessionPresent` flag is `true`. When that is the case,
 you may rely on stored session and prefer not to send subscribe commands for the client.
 
 #### Event `'reconnect'`
@@ -260,7 +182,8 @@ Emitted when the client receives a publish packet
 * `packet` received packet, as defined in
   [mqtt-packet](https://github.com/mcollina/mqtt-packet#publish)
 
--------------------------------------------------------
+---
+
 <a name="publish"></a>
 ### mqtt.Client#publish(topic, message, [options], [callback])
 
@@ -274,7 +197,8 @@ Publish a message to a topic
 * `callback` callback fired when the QoS handling completes,
   or at the next tick if QoS 0.
 
--------------------------------------------------------
+---
+
 <a name="subscribe"></a>
 ### mqtt.Client#subscribe(topic/topic array/topic object, [options], [callback])
 
@@ -292,7 +216,8 @@ Subscribe to a topic or topics
     * `topic` is a subscribed to topic
     * `qos` is the granted qos level on it
 
--------------------------------------------------------
+---
+
 <a name="unsubscribe"></a>
 ### mqtt.Client#unsubscribe(topic/topic array, [options], [callback])
 
@@ -301,7 +226,8 @@ Unsubscribe from a topic or topics
 * `topic` is a `String` topic or an array of topics to unsubscribe from
 * `callback` fired on unsuback
 
--------------------------------------------------------
+---
+
 <a name="end"></a>
 ### mqtt.Client#end([force], [cb])
 
@@ -313,7 +239,8 @@ Close the client, accepts the following options:
 * `cb`: will be called when the client is closed. This parameter is
   optional.
 
--------------------------------------------------------
+---
+
 <a name="handleMessage"></a>
 ### mqtt.Client#handleMessage(packet, callback)
 
@@ -321,7 +248,8 @@ Handle messages with backpressure support, one at a time.
 Override at will, but __always call `callback`__, or the client
 will hang.
 
--------------------------------------------------------
+---
+
 <a name="store"></a>
 ### mqtt.Store()
 
@@ -332,7 +260,8 @@ Another implementaion is
 [Level-browserify](http://npm.im/level-browserify) to store the inflight
 data, making it usable both in Node and the Browser.
 
--------------------------------------------------------
+---
+
 <a name="put"></a>
 ### mqtt.Store#put(packet, callback)
 
@@ -340,13 +269,15 @@ Adds a packet to the store, a packet is
 anything that has a `messageId` property.
 The callback is called when the packet has been stored.
 
--------------------------------------------------------
+---
+
 <a name="createStream"></a>
 ### mqtt.Store#createStream()
 
 Creates a stream with all the packets in the store.
 
--------------------------------------------------------
+---
+
 <a name="del"></a>
 ### mqtt.Store#del(packet, cb)
 
@@ -354,78 +285,16 @@ Removes a packet from the store, a packet is
 anything that has a `messageId` property.
 The callback is called when the packet has been removed.
 
--------------------------------------------------------
+---
+
 <a name="close"></a>
 ### mqtt.Store#close(cb)
 
 Closes the Store.
 
-<a name="browser"></a>
-## Browser
-
-<a name="browserify"></a>
-### Browserify
-
-In order to use MQTT.js as a browserify module you can either require it in your browserify bundles or build it as a stand alone module. The exported module is AMD/CommonJs compatible and it will add an object in the global space.
-
-```javascript
-npm install -g browserify // install browserify
-cd node_modules/mqtt
-npm install . // install dev dependencies
-browserify mqtt.js -s mqtt > browserMqtt.js // require mqtt in your client-side app
-```
-
-<a name="webpack"></a>
-### Webpack
-
-Just like browserify, export MQTT.js as library. The exported module would be `var mqtt = xxx` and it will add an object in the global space. You could also export module in other [formats (AMD/CommonJS/others)](http://webpack.github.io/docs/configuration.html#output-librarytarget) by setting **output.libraryTarget** in webpack configuration.
-
-```javascript
-npm install -g webpack // install webpack
-
-cd node_modules/mqtt
-npm install . // install dev dependencies
-webpack mqtt.js ./browserMqtt.js --output-library mqtt
-```
-
-you can then use mqtt.js in the browser with the same api than node's one.
-
-```html
-<html>
-<head>
-  <title>test Ws mqtt.js</title>
-</head>
-<body>
-<script src="./browserMqtt.js"></script>
-<script>
-      var client = mqtt.connect(); // you add a ws:// url here
-      client.subscribe("mqtt/demo");
-
-      client.on("message", function(topic, payload) {
-        alert([topic, payload].join(": "));
-        client.end();
-      });
-
-      client.publish("mqtt/demo", "hello world!");
-    </script>
-</body>
-</html>
-```
-
-Your broker should accept websocket connection (see [MQTT over Websockets](https://github.com/mcollina/mosca/wiki/MQTT-over-Websockets) to setup [Mosca](http://mcollina.github.io/mosca/)).
-
-<a name="contributing"></a>
-## Contributing
-
-MQTT.js is an **OPEN Open Source Project**. This means that:
-
-> Individuals making significant and valuable contributions are given commit-access to the project to contribute as they see fit. This project is more like an open wiki than a standard guarded open source project.
-
-See the [CONTRIBUTING.md](https://github.com/mqttjs/MQTT.js/blob/master/CONTRIBUTING.md) file for more details.
-
 ### Contributors
 
-MQTT.js is only possible due to the excellent work of the following contributors:
+This fork is only possible due to the excellent work of the original contributors:
 
 <table><tbody>
 <tr><th align="left">Adam Rudd</th><td><a href="https://github.com/adamvr">GitHub/adamvr</a></td><td><a href="http://twitter.com/adam_vr">Twitter/@adam_vr</a></td></tr>
