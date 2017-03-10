@@ -1,11 +1,11 @@
 {
     "name": "mqtt",
     "description": "A library for the MQTT protocol ported for Ruff",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "contributors": [
         "Adam Rudd <adamvrr@gmail.com>",
         "Matteo Collina <matteo.collina@gmail.com> (https://github.com/mcollina)",
-        "Vilic Vane <i@vilic.info>"
+        "Nanchao Inc."
     ],
     "keywords": [
         "mqtt",
